@@ -10,7 +10,7 @@ class BertGCN(nn.Module):
     def __init__(self, edges, features, config, args):
         super(BertGCN, self).__init__()
         self.label_features = features
-        self.edges = edges
+        self.edges = edges # Aij
         self.device = args.device
         self.dropout = nn.Dropout(config['dropout_prob'])
         
