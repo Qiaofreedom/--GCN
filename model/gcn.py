@@ -22,8 +22,10 @@ class GCNLayer(nn.Module):
             self.bias.data.uniform_(-stdv, stdv)   # 如果偏置项不为None，则同样使用均匀分布初始化偏置项。
     
     def forward(self, x, adj_matrix):  # x（输入特征矩阵）和adj_matrix（邻接矩阵）
-        sp = torch.matmul(x, self.weights)   # 计算输入特征矩阵和权重矩阵的矩阵乘法，得到中间特征表示。
-        output = torch.matmul(adj_matrix, sp)  # 将邻接矩阵与上一步计算得到的特征矩阵进行矩阵乘法，实现特征的邻域聚合。
+        sp = torch.matmul(x, self.weights)   # 计算输入特征矩阵和权重矩阵的矩阵乘法，得到中间特征表示。self.weights 是一个可学习的权重矩阵，它将每个节点的特征映射到一个新的空间，得到一个中间表示 sp
+        output = torch.matmul(adj_matrix, sp)  # 将邻接矩阵与上一步计算得到的特征矩阵进行矩阵乘法，实现特征的邻域聚合。adj_matrix 是图的邻接矩阵，它表示节点间的连接关系（例如，若节点i和节点j有边相连，则 adj_matrix[i][j] = 1）论文里面有自己的计算方法。
+        # 通过与 adj_matrix 的矩阵乘法，sp 中的每个节点特征被其邻居节点的特征加权平均。简单来说，邻居节点的特征会“传播”到目标节点上，这就是邻域聚合的关键部分。
+        # 邻域融合的目的是利用图中节点之间的连接关系来丰富节点的特征表示，使得节点不仅仅依赖自己的特征，还能融入邻居节点的特征，从而捕捉图结构中的重要信息
         if self.bias is not None:
             return output + self.bias
         else:
