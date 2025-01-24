@@ -4,7 +4,7 @@ import torch.nn as nn
 
 class GCNLayer(nn.Module):
 
-    def __init__(self, in_features, out_features, bias=True):  # in_features（输入特征的维度）、out_features（输出特征的维度）以及bias（布尔值，决定是否添加偏置项）
+    def __init__(self, in_features, out_features, bias=True):  # in_features（标签特征)、out_features（边矩阵，相关矩阵）以及bias（布尔值，决定是否添加偏置项）
         super(GCNLayer, self).__init__()  # 调用父类的构造函数，确保正确初始化模块的层次结构
         self.in_features = in_features  # 将输入和输出特征的维度保存为  类的成员变量。
         self.out_features = out_features
@@ -21,7 +21,7 @@ class GCNLayer(nn.Module):
         if self.bias is not None:
             self.bias.data.uniform_(-stdv, stdv)   # 如果偏置项不为None，则同样使用均匀分布初始化偏置项。
     
-    def forward(self, x, adj_matrix):  # x（输入特征矩阵）和adj_matrix（邻接矩阵）
+    def forward(self, x, adj_matrix):  # x（输入特征矩阵）和adj_matrix（邻接矩阵也就是相关矩阵）
         sp = torch.matmul(x, self.weights)   # 计算输入特征矩阵和权重矩阵的矩阵乘法，得到中间特征表示。self.weights 是一个可学习的权重矩阵，它将每个节点的特征映射到一个新的空间，得到一个中间表示 sp
         output = torch.matmul(adj_matrix, sp)  # 将邻接矩阵与上一步计算得到的特征矩阵进行矩阵乘法，实现特征的邻域聚合。adj_matrix 是图的邻接矩阵，它表示节点间的连接关系（例如，若节点i和节点j有边相连，则 adj_matrix[i][j] = 1）论文里面有自己的计算方法。
         # 通过与 adj_matrix 的矩阵乘法，sp 中的每个节点特征被其邻居节点的特征加权平均。简单来说，邻居节点的特征会“传播”到目标节点上，这就是邻域聚合的关键部分。
