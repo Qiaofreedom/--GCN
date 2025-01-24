@@ -110,7 +110,7 @@ class Dataset(object):
         
         for i in range(edges.size(0)): # 计算相关矩阵Aij ，使得矩阵的每个元素代表两个标签的相关性
             for j in range(edges.size(1)):
-                if edges[i][j] != 0:
+                if edges[i][j] != 0: # edges的维度是 c*c
                     edges[i][j] = (edges[i][j] * len(train_data["labels"]))/(marginal_edges[i] * marginal_edges[j])  # len(train_data["labels"])是指有多少个样本
 
         
