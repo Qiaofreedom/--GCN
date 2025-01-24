@@ -48,7 +48,7 @@ class Dataset(object):
         return train_loader, val_loader, test_loader, edges, label_features
     
     def create_edges_and_features(self, train_data, mlb): # 创建一个从标签到ID的映射
-        # 构建边：基于标签的共现关系，构建一个边矩阵，记录不同标签之间的关联强度
+        # 构建边矩阵：基于标签的共现关系，构建一个边矩阵，记录不同标签之间的关联强度
         # 边归一化：对边矩阵进行归一化处理，以便于模型处理
         # 特征提取：从Wikipedia中提取标签对应的特征（使用SBERT模型提取文本嵌入）
         
