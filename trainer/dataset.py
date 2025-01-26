@@ -172,7 +172,7 @@ class Dataset(object):
         for label, id in tqdm(label2id.items()): # 从Wikipedia中获取每个标签的嵌入
             features[id] = get_embedding_from_wiki(self.sbert, label, n_sent=2)
             
-        return edges, features  # 返回处理后的边矩阵和特征矩阵。边矩阵就是相关矩阵Aij
+        return edges, features  # 返回处理后的边矩阵和特征矩阵。边矩阵edges就是相关矩阵Aij (c*c),features 是c*768
 
 ###################################################################################################################################################################
 # 在之前的步骤中，归一化前的edges边矩阵已被计算（但未加自连接）如下：
